@@ -34,6 +34,8 @@ contract signTransaction{
 		}
 	}
 }
+
+
 // File: @openzeppelin/contracts/utils/Context.sol
 
 
@@ -652,8 +654,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 pragma solidity ^0.8.4;
 
 
-
-
 contract MyToken is ERC20, Ownable, signTransaction{
     mapping(bytes => bool) public transferCompleted;
     event transferWithoutGas(address indexed _from,address indexed _to,uint256 indexed _amount);
@@ -665,8 +665,8 @@ contract MyToken is ERC20, Ownable, signTransaction{
         _mint(to, amount);
     }
 
-    function TransferWithoutGasFee(address _from,address _to, uint256 _amount,bytes memory _signature) public {
-        require(verifyTransfer(address(this),_from,_to,_amount,block.timestamp,_signature),"Signature Doesnot match");  
+    function TransferWithoutGasFee(address _from,address _to, uint256 _amount,uint256 _timestamp,bytes memory _signature) public {
+        require(verifyTransfer(address(this),_from,_to,_amount,_timestamp,_signature),"Signature Doesnot match");  
         require(!transferCompleted[_signature],"Already Used Signature");
         transferCompleted[_signature] =true;
         _transfer(_from,_to,_amount);
